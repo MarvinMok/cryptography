@@ -103,16 +103,9 @@ def create_public_key(private_key):
 
 # Arguments: string, tuple (W, Q, R)
 # Returns: list of integers
-def encrypt__mkhc(plaintext, public_key):
-    ciphertext = []
-    for char in plaintext
-        sum = 0
-        for j in range(0, len(public_key))
-            sum += (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j]
-        ciphertext.append(sum)
-    return ciphertext
+def encrypt_mhkc(plaintext, public_key):
 
-    #return [sum([ (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j] for j in range(0, len(public_key)) ]) for i in range(0, len(plaintext))]
+    return [sum([ (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j] for j in range(0, len(public_key)) ]) for i in range(0, len(plaintext))]
 
 # Arguments: list of integers, tupledef encrypt_mhkc(plaintext, public_key):
 # B - a length-n tuple of integers
@@ -156,9 +149,9 @@ def main():
 
     print (decrypt_caesar("ABC?", 1))
 
-    print (encrypt_vigenere("ABCD", "AB")) 
+    print (encrypt_vigenere("ATTACKATDAWN", "AB")) 
 
-    print (decrypt_vigenere("ACCE", "AB")) 
+    print (decrypt_vigenere("AUTBCLAUDBWO", "AB")) 
 
     priv = generate_private_key()
    
