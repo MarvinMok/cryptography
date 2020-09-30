@@ -76,6 +76,8 @@ def decrypt_vigenere(ciphertext, keyword):
 # Arguments: integer
 # Returns: tuple (W, Q, R) - W a length-n tuple of integers, Q and R both integers
 def generate_private_key(n=8):
+   
+
     W_as_list = [random.randint(0, 100)]
     total = W_as_list[0]
     for i in range(1, n):
@@ -91,8 +93,7 @@ def generate_private_key(n=8):
             done = 1
 
     return (W, Q, R)
-
-    #return tuple ([tuple(itertools.accumulate(sorted(random.sample(range(0, 10000), n))))] + list(map(operator.add, list(itertools.repeat(random.randint(n*10000, n*20000), 2)), [0,-1])))
+    #return tuple ([tuple(itertools.accumulate(sorted(random.sample(range(0, 10000), n))))] + (lambda Q:[Q, (lambda temp: (lambda Rs: Rs[random.randint(0, len(Rs))])(list(itertools.dropwhile(lambda x: x == 0, sorted([temp[i] if math.gcd(temp[i], Q) == 1 else 0 for i in range(0, len(temp))])))) )(list(range(2, Q - 1)))])(random.randint(n*10000, n*11000)))
 
 # Arguments: tuple (W, Q, R) - W a length-n tuple of integers, Q and R both integers
 # Returns: tuple B - a length-n tuple of integers
@@ -102,10 +103,19 @@ def create_public_key(private_key):
 
 # Arguments: string, tuple (W, Q, R)
 # Returns: list of integers
-def encrypt_mhkc(plaintext, public_key):
-    return [sum([ (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j] for j in range(0, len(public_key)) ]) for i in range(0, len(plaintext))]
+def encrypt__mkhc(plaintext, public_key):
+    ciphertext = []
+    for char in plaintext
+        sum = 0
+        for j in range(0, len(public_key))
+            sum += (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j]
+        ciphertext.append(sum)
+    return ciphertext
 
-# Arguments: list of integers, tuple B - a length-n tuple of integers
+    #return [sum([ (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j] for j in range(0, len(public_key)) ]) for i in range(0, len(plaintext))]
+
+# Arguments: list of integers, tupledef encrypt_mhkc(plaintext, public_key):
+# B - a length-n tuple of integers
 # Returns: bytearray or str of plaintext
 def decrypt_mhkc(ciphertext, private_key):
     W = private_key[0]
@@ -117,14 +127,18 @@ def decrypt_mhkc(ciphertext, private_key):
         C = ciphertext[i] * S % Q
         charAsInt = 0
         for j in range(0, len(W)):
-            print(C)
+            #print(C)
             if C >= W[7 - j]:
                 C = C - W[7 - j]
                 charAsInt = (1 <<  (7 - j)) | charAsInt
-            print(C)
+            #print(C)
               
         plaintext += chr(charAsInt)
     return plaintext
+    
+    #return "".join( (lambda S, temp: [chr((lambda C: sorted([i if temp[i] == C else 0 for i in range(0, 2 ** len(private_key[0]))]).pop())(ciphertext[i] * S % private_key[1])) for i in range(0, len(ciphertext))]) (sorted([S if private_key[2] * S % private_key[1] == 1 else 0 for S in range(2, private_key[1] - 1 )]).pop(), ( [sum([ (not (i & (1 << j)) == 0) * private_key[0][j] for j in range(0,len(private_key[0]))]) for i in range(0, 2 ** len(private_key[0]))])))
+
+  
 
 
 
@@ -134,6 +148,7 @@ def find_s(R, Q):
             return S
 
     return 0;
+    #return sorted([S if R * S % Q == 1 else 0 for S in range(2, Q -1 )]).pop()
 
 def main():
     # Testing code here
@@ -155,12 +170,12 @@ def main():
     print("pub")
     print(pub)
 
-    e = encrypt_mhkc("MARVIN", pub)
+    e = encrypt_mhkc("ATTACKATDAWN", pub)
     print ("e")
     print (e)
    
     d = decrypt_mhkc(e, priv)
-
+    print("d")
     print (d)
 
 
