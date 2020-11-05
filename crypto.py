@@ -103,13 +103,13 @@ def create_public_key(private_key):
 
 # Arguments: string, tuple (W, Q, R)
 # Returns: list of integers
-def encrypt_mhkc(plaintext, public_key):
+def encrypt_mhkc(plaintext, public_key = (50, 70, 175, 575, 1240, 3385, 7065, 7978)):
 
     ciphertext = []
     for char in plaintext:
         sum = 0
         for j in range(0, len(public_key)):
-            sum += (not (ord(char) & (1 << j)) == 0) * public_key[j]
+            sum += (not (ord(char) & (1 << (7 - j))) == 0) * public_key[j]
         ciphertext.append(sum)
     return ciphertext
     #return [sum([ (not (ord(plaintext[i]) & (1 << j)) == 0) * public_key[j] for j in range(0, len(public_key)) ]) for i in range(0, len(plaintext))]
@@ -117,7 +117,7 @@ def encrypt_mhkc(plaintext, public_key):
 # Arguments: list of integers, tupledef encrypt_mhkc(plaintext, public_key):
 # B - a length-n tuple of integers
 # Returns: bytearray or str of plaintext
-def decrypt_mhkc(ciphertext, private_key):
+def decrypt_mhkc(ciphertext, private_key = ((10, 14, 35, 115, 248, 677, 1413, 3644), 10242, 5)):
     W = private_key[0]
     Q = private_key[1]
     R = private_key[2]
@@ -130,7 +130,7 @@ def decrypt_mhkc(ciphertext, private_key):
             #print(C)
             if C >= W[7 - j]:
                 C = C - W[7 - j]
-                charAsInt = (1 <<  (7 - j)) | charAsInt
+                charAsInt = (1 <<  (j)) | charAsInt
             #print(C)
               
         plaintext += chr(charAsInt)
@@ -170,11 +170,11 @@ def main():
     print("pub")
     print(pub)
 
-    e = encrypt_mhkc("ATTACKATDAWN", pub)
+    e = encrypt_mhkc("FOREACHEPSILONGREATERTHANDELTA")
     print ("e")
     print (e)
    
-    d = decrypt_mhkc(e, priv)
+    d = decrypt_mhkc(e)
     print("d")
     print (d)
 
